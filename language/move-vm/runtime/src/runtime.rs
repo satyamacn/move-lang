@@ -82,6 +82,7 @@ impl VMRuntime {
         _gas_meter: &mut impl GasMeter,
         compat_config: CompatibilityConfig,
     ) -> VMResult<()> {
+        println!("publish_module_bundle");
         // deserialize the modules. Perform bounds check. After this indexes can be
         // used with the `[]` operator
         let compiled_modules = match modules
