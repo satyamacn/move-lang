@@ -688,6 +688,7 @@ impl Loader {
         ty_args: &[TypeTag],
         data_store: &impl DataStore,
     ) -> VMResult<(Arc<Module>, Arc<Function>, LoadedFunctionInstantiation)> {
+        println!("loader load_function");
         let module = self.load_module(module_id, data_store)?;
         let idx = self
             .module_cache
