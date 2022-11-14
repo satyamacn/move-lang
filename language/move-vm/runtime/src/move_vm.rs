@@ -85,6 +85,7 @@ impl MoveVM {
         module_id: &ModuleId,
         remote: &'r S,
     ) -> VMResult<Arc<CompiledModule>> {
+        println!("move_vm::load_module check account map for {:?}", module_id);
         self.runtime
             .loader()
             .load_module(

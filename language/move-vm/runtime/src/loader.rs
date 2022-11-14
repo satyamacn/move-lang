@@ -688,6 +688,7 @@ impl Loader {
         ty_args: &[TypeTag],
         data_store: &impl DataStore,
     ) -> VMResult<(Arc<Module>, Arc<Function>, LoadedFunctionInstantiation)> {
+        println!("loader load_function");
         let module = self.load_module(module_id, data_store)?;
         let idx = self
             .module_cache
@@ -947,6 +948,7 @@ impl Loader {
         id: &ModuleId,
         data_store: &impl DataStore,
     ) -> VMResult<Arc<Module>> {
+        println!("loader::load_module for {:?}", id);
         self.load_module_internal(id, &BTreeMap::new(), &BTreeSet::new(), data_store)
     }
 
@@ -961,6 +963,7 @@ impl Loader {
     ) -> VMResult<Arc<Module>> {
         // if the module is already in the code cache, load the cached version
         if let Some(cached) = self.module_cache.read().module_at(id) {
+            println!("loader::load_module_internal- cache hit on {:?}", id);
             self.module_cache_hits.write().insert(id.clone());
             return Ok(cached);
         }
@@ -991,6 +994,7 @@ impl Loader {
         data_store: &impl DataStore,
         allow_loading_failure: bool,
     ) -> VMResult<CompiledModule> {
+        println!("load_and_verify_module- load and verify {:?}", id);
         // bytes fetching, allow loading to fail if the flag is set
         let bytes = match data_store.load_module(id) {
             Ok(bytes) => bytes,

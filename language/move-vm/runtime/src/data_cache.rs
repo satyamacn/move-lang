@@ -232,13 +232,20 @@ impl<'r, 'l, S: MoveResolver> DataStore for TransactionDataCache<'r, 'l, S> {
     }
 
     fn load_module(&self, module_id: &ModuleId) -> VMResult<Vec<u8>> {
+        println!("data_cache::load_module for {:?}", module_id);
         if let Some(account_cache) = self.account_map.get(module_id.address()) {
+            println!("data_cache::load_module check account map for {:?}", module_id);
             if let Some((blob, _is_republishing)) = account_cache.module_map.get(module_id.name()) {
+                println!("data_cache::load_module got from account_cache.module_map {:?}", module_id);
                 return Ok(blob.clone());
             }
         }
+        println!("data_cache::load_module going to remote for {:?}", module_id);
         match self.remote.get_module(module_id) {
-            Ok(Some(bytes)) => Ok(bytes),
+            Ok(Some(bytes)) => {
+                println!("data_cache::load_module got from remote for {:?}", module_id);
+                Ok(bytes)
+            },
             Ok(None) => Err(PartialVMError::new(StatusCode::LINKER_ERROR)
                 .with_message(format!("Cannot find {:?} in data cache", module_id))
                 .finish(Location::Undefined)),
